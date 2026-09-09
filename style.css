@@ -313,11 +313,10 @@ input[type="text"]::placeholder { color: var(--text-muted); }
   transition: opacity 0.3s;
 }
 
-/* ── Photo wall ───────────────────────────────────────────── */
+/* ── Photo wall — masonry, uncropped ─────────────────────── */
 .wall-grid {
-  display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  gap: 1.1rem;
+  columns: 2;
+  column-gap: 0.85rem;
   max-width: 460px;
   width: 100%;
   margin: 1.5rem auto 0;
@@ -326,7 +325,7 @@ input[type="text"]::placeholder { color: var(--text-muted); }
 .polaroid {
   background: #f5ecdc;
   border-radius: 3px;
-  padding: 0.55rem 0.55rem 2.6rem;
+  padding: 0.5rem;               /* equal frame on all sides — no crop */
   box-shadow: 0 5px 20px rgba(0,0,0,0.55), 0 0 10px var(--gold-glow);
   transform: rotate(var(--rot, 0deg));
   opacity: 0;
@@ -336,23 +335,26 @@ input[type="text"]::placeholder { color: var(--text-muted); }
   transition: transform 0.3s cubic-bezier(0.22,1,0.36,1), box-shadow 0.3s;
   will-change: transform;
   -webkit-tap-highlight-color: transparent;
+  break-inside: avoid;
+  display: inline-block;
+  width: 100%;
+  margin-bottom: 0.85rem;
 }
 .polaroid:hover, .polaroid:active {
-  transform: rotate(0deg) scale(1.05);
+  transform: rotate(0deg) scale(1.03);
   box-shadow: 0 10px 36px rgba(0,0,0,0.7), 0 0 20px var(--pink-glow);
 }
+.polaroid.has-caption { padding-bottom: 2rem; }
 
 .polaroid-img {
   width: 100%;
-  aspect-ratio: 1;
-  object-fit: cover;
-  border-radius: 1px;
-  background: #1a1230;
+  height: auto;          /* natural aspect ratio — no crop */
   display: block;
+  border-radius: 1px;
 }
 .polaroid-placeholder {
   width: 100%;
-  aspect-ratio: 1;
+  min-height: 80px;
   background: #1a1230;
   display: flex;
   align-items: center;
