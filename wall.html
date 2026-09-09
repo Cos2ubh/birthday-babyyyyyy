@@ -9,6 +9,27 @@
   <meta name="robots" content="noindex">
   <title>Our Memories 📸</title>
   <link rel="stylesheet" href="style.css">
+  <style>
+    .polaroid-wrap {
+      position: relative;
+    }
+    .play-badge {
+      position: absolute;
+      top: 0.45rem;
+      left: 0.45rem;
+      background: rgba(0,0,0,0.55);
+      border-radius: 50%;
+      width: 28px; height: 28px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 0.7rem;
+      color: #fff;
+      backdrop-filter: blur(4px);
+      pointer-events: none;
+      transition: opacity 0.25s;
+    }
+    .polaroid:hover .play-badge,
+    .polaroid.playing .play-badge { opacity: 0; }
+  </style>
 </head>
 <body>
   <script src="bg-stars.js"></script>
@@ -30,9 +51,8 @@
 
   <script src="cursor-trail.js"></script>
   <script>
-    // ── Add your photos to the images/ folder and update this list ──
-    // Format: { src: 'images/filename.jpg', caption: 'your caption' }
-    const photos = [
+    const items = [
+      // ── Photos ────────────────────────────────────────────────
       { src: 'images/photo1.jpg',  caption: 'us ✦' },
       { src: 'images/photo2.jpg',  caption: 'my queen, always 👑' },
       { src: 'images/photo3.jpg',  caption: '14 feb 2025 ♡' },
@@ -43,37 +63,93 @@
       { src: 'images/photo4.jpg',  caption: 'me: look at the camera!! 😭' },
       { src: 'images/photo5.jpg',  caption: 'her, every single call 📱' },
       { src: 'images/photo6.jpg',  caption: 'waiting for me (as always) ✦' },
-      { src: 'images/photo11.jpg', caption: 'mommmyyyyy 🐻' },
+
+      // ── Videos (hover to play) ─────────────────────────────────
+      { src: 'images/photo11.jpg', caption: 'mommmyyyyy 🐻',              video: 'videos/vid1.mp4' },
+      { src: 'images/photo12.jpg', caption: 'that smile though ♡',        video: 'videos/vid2.mp4' },
+      { src: 'images/photo13.jpg', caption: 'this is us ✦',               video: 'videos/vid3.mp4' },
+      { src: 'images/photo14.jpg', caption: 'her in every hotel room ✦',  video: 'videos/vid4.mp4' },
+      { src: 'images/photo15.jpg', caption: 'she put these there ✦',      video: 'videos/vid5.mp4' },
     ];
 
-    const rotations = [-3.2, 2.4, -1.8, 3.1, -2.6, 1.9, -2.1, 3.4, -1.5, 2.8];
+    const rotations = [-3.2,2.4,-1.8,3.1,-2.6,1.9,-2.1,3.4,-1.5,2.8,-3.0,1.6,-2.3,2.9,-1.2];
     const grid      = document.getElementById('wallGrid');
 
-    photos.forEach((p, i) => {
-      const wrap    = document.createElement('div');
-      wrap.className = 'polaroid';
+    items.forEach((p, i) => {
+      const wrap = document.createElement('div');
+      wrap.className = 'polaroid polaroid-wrap';
       wrap.style.setProperty('--rot',   rotations[i % rotations.length] + 'deg');
-      wrap.style.setProperty('--delay', (i * 0.13 + 0.15) + 's');
+      wrap.style.setProperty('--delay', (i * 0.1 + 0.15) + 's');
 
-      const img  = document.createElement('img');
-      img.className = 'polaroid-img';
-      img.src       = p.src;
-      img.alt       = p.caption;
-      img.loading   = 'lazy';
-
-      img.onerror = function () {
-        this.remove();
-        const ph = document.createElement('div');
-        ph.className = 'polaroid-placeholder';
-        ph.innerHTML = '<span>📷</span>drop a photo here';
-        wrap.prepend(ph);
-      };
-
-      const cap    = document.createElement('p');
-      cap.className = 'polaroid-caption';
+      const cap = document.createElement('p');
+      cap.className   = 'polaroid-caption';
       cap.textContent = p.caption;
 
-      wrap.append(img, cap);
+      if (p.video) {
+        // ── Video polaroid ───────────────────────────────────────
+        const vid = document.createElement('video');
+        vid.className   = 'polaroid-img';
+        vid.src         = p.video;
+        vid.poster      = p.src;
+        vid.muted       = true;
+        vid.loop        = true;
+        vid.playsInline = true;
+        vid.preload     = 'none';
+        vid.setAttribute('playsinline', '');
+        vid.setAttribute('webkit-playsinline', '');
+
+        // Play badge (▶)
+        const badge = document.createElement('div');
+        badge.className   = 'play-badge';
+        badge.textContent = '▶';
+
+        // Desktop: hover to play
+        wrap.addEventListener('mouseenter', () => {
+          vid.play().catch(() => {});
+          wrap.classList.add('playing');
+        });
+        wrap.addEventListener('mouseleave', () => {
+          vid.pause();
+          vid.currentTime = 0;
+          wrap.classList.remove('playing');
+        });
+
+        // Mobile: tap to toggle play/pause
+        let tapping = false;
+        wrap.addEventListener('touchstart', () => {
+          if (!tapping) {
+            tapping = true;
+            vid.play().catch(() => {});
+            wrap.classList.add('playing');
+          } else {
+            tapping = false;
+            vid.pause();
+            vid.currentTime = 0;
+            wrap.classList.remove('playing');
+          }
+        }, { passive: true });
+
+        wrap.append(vid, badge, cap);
+
+      } else {
+        // ── Photo polaroid ───────────────────────────────────────
+        const img = document.createElement('img');
+        img.className = 'polaroid-img';
+        img.src       = p.src;
+        img.alt       = p.caption;
+        img.loading   = 'lazy';
+
+        img.onerror = function () {
+          this.remove();
+          const ph = document.createElement('div');
+          ph.className = 'polaroid-placeholder';
+          ph.innerHTML = '<span>📷</span>drop a photo here';
+          wrap.prepend(ph);
+        };
+
+        wrap.append(img, cap);
+      }
+
       grid.appendChild(wrap);
     });
 
