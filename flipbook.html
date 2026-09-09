@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <meta name="theme-color" content="#04040e">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="robots" content="noindex">
+  <title>Why I Love You ✦</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <script src="bg-stars.js"></script>
+
+  <div class="page">
+    <div class="title-row">
+      <span class="star-decor" style="font-size:1.5rem">✦</span>
+      <h2>Why I Love You</h2>
+      <span class="star-decor" style="font-size:1.5rem;animation-delay:1.4s">✦</span>
+    </div>
+    <h3 style="margin-bottom:1.5rem">tap through ♡ swipe works too</h3>
+
+    <div class="flipbook-wrap" id="flipWrap"></div>
+
+    <div class="flip-controls">
+      <button class="btn btn-sm" id="prevBtn" onclick="go(-1)">← back</button>
+      <span class="flip-counter" id="counter">1 / 12</span>
+      <button class="btn btn-sm" id="nextBtn" onclick="go(1)">next →</button>
+    </div>
+
+    <div class="nav-bottom" id="doneNav" style="opacity:0;pointer-events:none;transition:opacity 0.5s">
+      <button class="btn" onclick="navigateTo('message.html')">A message for you ✦</button>
+    </div>
+  </div>
+
+  <script src="cursor-trail.js"></script>
+  <script>
+    // ── Feel free to replace these with your own reasons ──
+    const reasons = [
+      "The way your eyes light up when you talk about something you love 🌟",
+      "How you make every ordinary moment feel like something worth remembering",
+      "Your laugh — honestly one of my favourite sounds in the world",
+      "The way you care so deeply about the people you love",
+      "How you make me want to be a better person, just by being you",
+      "The little things you do without even realising — they mean everything",
+      "The way you hold my hand, like you're making sure I don't disappear",
+      "How safe I feel when I'm with you",
+      "Your messy hair in the morning and how you don't care 🌙",
+      "The fact that you feel like home, no matter where we are",
+      "How patient you are, even when I'm being difficult",
+      "The fact that you're reading this right now, probably smiling ✦"
+    ];
+
+    const wrap    = document.getElementById('flipWrap');
+    const counter = document.getElementById('counter');
+    const doneNav = document.getElementById('doneNav');
+    let   cur     = 0;
+    let   locked  = false;
+
+    reasons.forEach((r, i) => {
+      const card = document.createElement('div');
+      card.className = 'flip-card' + (i === 0 ? ' active' : '');
+      card.innerHTML = `<p class="reason-text">${r}</p><span class="reason-num">reason ${i + 1} of ${reasons.length}</span>`;
+      wrap.appendChild(card);
+    });
+
+    const cards = wrap.querySelectorAll('.flip-card');
+
+    function updateUI() {
+      counter.textContent = `${cur + 1} / ${reasons.length}`;
+      if (cur === reasons.length - 1) {
+        doneNav.style.opacity       = '1';
+        doneNav.style.pointerEvents = 'auto';
+      }
+    }
+
+    function go(dir) {
+      const next = cur + dir;
+      if (next < 0 || next >= reasons.length || locked) return;
+      locked = true;
+
+      cards[cur].classList.add('leaving');
+      cards[cur].classList.remove('active');
+
+      setTimeout(() => {
+        cards[cur].classList.remove('leaving');
+        cur = next;
+        cards[cur].classList.add('active');
+        updateUI();
+        setTimeout(() => { locked = false; }, 80);
+      }, 340);
+    }
+
+    // Swipe support
+    let swipeStartX = 0;
+    wrap.addEventListener('touchstart', e => { swipeStartX = e.touches[0].clientX; }, { passive: true });
+    wrap.addEventListener('touchend',   e => {
+      const dx = e.changedTouches[0].clientX - swipeStartX;
+      if (Math.abs(dx) > 36) go(dx < 0 ? 1 : -1);
+    }, { passive: true });
+
+    function navigateTo(url) {
+      document.body.style.animation = 'pageExit 0.4s cubic-bezier(0.22,1,0.36,1) forwards';
+      setTimeout(() => { window.location.href = url; }, 420);
+    }
+
+    updateUI();
+  </script>
+</body>
+</html>

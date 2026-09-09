@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <meta name="theme-color" content="#04040e">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="robots" content="noindex">
+  <title>A Letter ✦</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <script src="bg-stars.js"></script>
+
+  <div class="page">
+    <div class="title-row" style="margin-bottom:0.4rem">
+      <span class="star-decor" style="font-size:1.5rem">✦</span>
+      <h2>A Letter</h2>
+      <span class="star-decor" style="font-size:1.5rem;animation-delay:1.4s">✦</span>
+    </div>
+    <p class="open-hint">tap the envelope to unfold it ✦</p>
+
+    <div class="letter-outer">
+      <div class="letter-envelope">
+
+        <span class="envelope-icon" id="envIcon" onclick="openLetter()">💌</span>
+
+        <div class="letter-content" id="letterContent">
+
+          <!-- Star map image — save yours as images/star-map.jpg to replace this placeholder -->
+          <div class="star-map-slot" id="mapSlot">
+            <span class="slot-icon">🌌</span>
+            save your star map image as<br><strong>images/star-map.jpg</strong><br>and it will appear here
+          </div>
+
+          <!-- ── Paste the letter text here ── -->
+          <div class="letter-text" id="letterText">YOUR_LETTER_HERE</div>
+
+        </div>
+      </div>
+    </div>
+
+    <div class="nav-bottom" id="wishNav"
+         style="opacity:0;pointer-events:none;transition:opacity 0.7s ease;margin-top:1.5rem">
+      <button class="btn" onclick="navigateTo('wishlist.html')">Our Wish List ✦</button>
+    </div>
+  </div>
+
+  <script src="cursor-trail.js"></script>
+  <script>
+    // Try to load star map image — replace placeholder if it exists
+    (function () {
+      const probe = new Image();
+      probe.onload = () => {
+        const slot = document.getElementById('mapSlot');
+        const img  = document.createElement('img');
+        img.src       = 'images/star-map.jpg';
+        img.alt       = 'our star map';
+        img.className = 'star-map-img';
+        slot.replaceWith(img);
+      };
+      probe.src = 'images/star-map.jpg';
+    })();
+
+    let opened = false;
+
+    function openLetter() {
+      if (opened) return;
+      opened = true;
+
+      const icon    = document.getElementById('envIcon');
+      const content = document.getElementById('letterContent');
+
+      // Shrink icon, then reveal content
+      icon.style.fontSize  = '1.6rem';
+      icon.style.marginBottom = '1rem';
+      icon.style.animation = 'none';
+      icon.style.cursor    = 'default';
+
+      requestAnimationFrame(() => {
+        content.classList.add('open');
+      });
+
+      // Show next button after content has had time to unfold
+      setTimeout(() => {
+        const nav = document.getElementById('wishNav');
+        nav.style.opacity       = '1';
+        nav.style.pointerEvents = 'auto';
+      }, 900);
+    }
+
+    function navigateTo(url) {
+      document.body.style.animation = 'pageExit 0.4s cubic-bezier(0.22,1,0.36,1) forwards';
+      setTimeout(() => { window.location.href = url; }, 420);
+    }
+  </script>
+</body>
+</html>

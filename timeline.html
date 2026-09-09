@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <meta name="theme-color" content="#04040e">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="robots" content="noindex">
+  <title>Our Timeline ✦</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <script src="bg-stars.js"></script>
+
+  <div class="page">
+    <div class="title-row">
+      <span class="star-decor" style="font-size:1.5rem">✦</span>
+      <h2>How We Got Here</h2>
+      <span class="star-decor" style="font-size:1.5rem;animation-delay:1.4s">✦</span>
+    </div>
+    <h3 style="margin-bottom:0.35rem">every chapter of us ♡</h3>
+
+    <div class="timeline">
+
+      <div class="tl-item" style="--delay:0.15s">
+        <div class="tl-dot">💬</div>
+        <div class="tl-body">
+          <span class="tl-date">12 May 2021</span>
+          <div class="tl-title">The first text</div>
+          <div class="tl-desc">and just like that, everything changed</div>
+        </div>
+      </div>
+
+      <div class="tl-item" style="--delay:0.4s">
+        <div class="tl-dot">🎬</div>
+        <div class="tl-body">
+          <span class="tl-date">31 Dec 2021</span>
+          <div class="tl-title">First movie date</div>
+          <div class="tl-desc">New Year's Eve — I spent more time looking at you than the screen</div>
+        </div>
+      </div>
+
+      <!-- ── Add your own moments below — copy a .tl-item block ── -->
+
+      <div class="tl-item" style="--delay:0.65s">
+        <div class="tl-dot">✦</div>
+        <div class="tl-body">
+          <span class="tl-date">add a date</span>
+          <div class="tl-title">your moment here</div>
+          <div class="tl-desc">your description here</div>
+        </div>
+      </div>
+
+      <div class="tl-item" style="--delay:0.9s">
+        <div class="tl-dot">✦</div>
+        <div class="tl-body">
+          <span class="tl-date">add a date</span>
+          <div class="tl-title">your moment here</div>
+          <div class="tl-desc">your description here</div>
+        </div>
+      </div>
+
+      <div class="tl-item" style="--delay:1.15s">
+        <div class="tl-dot">✦</div>
+        <div class="tl-body">
+          <span class="tl-date">add a date</span>
+          <div class="tl-title">your moment here</div>
+          <div class="tl-desc">your description here</div>
+        </div>
+      </div>
+
+      <div class="tl-item" style="--delay:1.4s">
+        <div class="tl-dot">💛</div>
+        <div class="tl-body">
+          <span class="tl-date">Today</span>
+          <div class="tl-title">Her birthday</div>
+          <div class="tl-desc">still my favourite day, every single year</div>
+        </div>
+      </div>
+
+    </div>
+
+    <div class="nav-bottom">
+      <button class="btn" onclick="navigateTo('flipbook.html')">Why I Love You ✦</button>
+    </div>
+  </div>
+
+  <script src="cursor-trail.js"></script>
+  <script>
+    function navigateTo(url) {
+      document.body.style.animation = 'pageExit 0.4s cubic-bezier(0.22,1,0.36,1) forwards';
+      setTimeout(() => { window.location.href = url; }, 420);
+    }
+  </script>
+</body>
+</html>

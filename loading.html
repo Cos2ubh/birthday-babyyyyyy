@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <meta name="theme-color" content="#04040e">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="robots" content="noindex">
+  <title>Loading... ✨</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <script src="bg-stars.js"></script>
+
+  <div class="page">
+    <div class="title-row">
+      <span class="star-decor" style="font-size:1.6rem">✦</span>
+      <h2>just a moment</h2>
+      <span class="star-decor" style="font-size:1.6rem;animation-delay:1.4s">✦</span>
+    </div>
+
+    <div class="loading-wrap fade-in">
+      <p class="loading-msg" id="loadMsg">starting up your world…</p>
+      <div class="progress-track">
+        <div class="progress-fill" id="progressFill"></div>
+      </div>
+      <p class="progress-pct" id="progressPct">0%</p>
+    </div>
+  </div>
+
+  <script src="cursor-trail.js"></script>
+  <script>
+    const steps = [
+      [0,   'starting up your world…'],
+      [10,  'loading all the good memories…'],
+      [22,  'importing every goodnight text…'],
+      [36,  'counting the times you made me smile (this is taking a while)…'],
+      [50,  'calculating how much I love you… ∞… converting to percentage…'],
+      [63,  'finding the perfect words for you…'],
+      [75,  'adding extra stars just for you…'],
+      [87,  'almost there, Babyyyyyy…'],
+      [97,  'you ready? 💛'],
+      [100, 'here we go ✦']
+    ];
+
+    const fill    = document.getElementById('progressFill');
+    const msgEl   = document.getElementById('loadMsg');
+    const pctEl   = document.getElementById('progressPct');
+    let   step    = 0;
+
+    function next() {
+      if (step >= steps.length) {
+        setTimeout(() => {
+          document.body.style.animation = 'pageExit 0.4s cubic-bezier(0.22,1,0.36,1) forwards';
+          setTimeout(() => { window.location.href = 'wall.html'; }, 420);
+        }, 600);
+        return;
+      }
+
+      const [pct, msg] = steps[step];
+      fill.style.width     = pct + '%';
+      pctEl.textContent    = pct + '%';
+      msgEl.style.opacity  = '0';
+      setTimeout(() => {
+        msgEl.textContent   = msg;
+        msgEl.style.opacity = '1';
+      }, 220);
+
+      step++;
+
+      // Vary the pace so it feels organic — faster early, dramatic pause near 100%
+      const delay = step <= 2
+        ? 550
+        : step <= 7
+        ? 700 + Math.random() * 450
+        : 1100;
+
+      setTimeout(next, delay);
+    }
+
+    setTimeout(next, 400);
+  </script>
+</body>
+</html>

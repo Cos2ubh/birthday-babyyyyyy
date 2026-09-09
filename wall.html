@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <meta name="theme-color" content="#04040e">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="robots" content="noindex">
+  <title>Our Memories 📸</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <script src="bg-stars.js"></script>
+
+  <div class="page">
+    <div class="title-row">
+      <span class="star-decor" style="font-size:1.5rem">✦</span>
+      <h2>Our Story in Pictures</h2>
+      <span class="star-decor" style="font-size:1.5rem;animation-delay:1.4s">✦</span>
+    </div>
+    <h3 style="margin-bottom:1.4rem">little snapshots of us ♡</h3>
+
+    <div class="wall-grid" id="wallGrid"></div>
+
+    <div class="nav-bottom">
+      <button class="btn" onclick="navigateTo('timeline.html')">Our Timeline ✦</button>
+    </div>
+  </div>
+
+  <script src="cursor-trail.js"></script>
+  <script>
+    // ── Add your photos to the images/ folder and update this list ──
+    // Format: { src: 'images/filename.jpg', caption: 'your caption' }
+    const photos = [
+      { src: 'images/photo1.jpg', caption: 'your caption here ✦' },
+      { src: 'images/photo2.jpg', caption: 'your caption here ✦' },
+      { src: 'images/photo3.jpg', caption: 'your caption here ✦' },
+      { src: 'images/photo4.jpg', caption: 'your caption here ✦' },
+      { src: 'images/photo5.jpg', caption: 'your caption here ✦' },
+      { src: 'images/photo6.jpg', caption: 'your caption here ✦' },
+    ];
+
+    const rotations = [-3.2, 2.4, -1.8, 3.1, -2.6, 1.9];
+    const grid      = document.getElementById('wallGrid');
+
+    photos.forEach((p, i) => {
+      const wrap    = document.createElement('div');
+      wrap.className = 'polaroid';
+      wrap.style.setProperty('--rot',   rotations[i % rotations.length] + 'deg');
+      wrap.style.setProperty('--delay', (i * 0.13 + 0.15) + 's');
+
+      const img  = document.createElement('img');
+      img.className = 'polaroid-img';
+      img.src       = p.src;
+      img.alt       = p.caption;
+      img.loading   = 'lazy';
+
+      img.onerror = function () {
+        this.remove();
+        const ph = document.createElement('div');
+        ph.className = 'polaroid-placeholder';
+        ph.innerHTML = '<span>📷</span>drop a photo here';
+        wrap.prepend(ph);
+      };
+
+      const cap    = document.createElement('p');
+      cap.className = 'polaroid-caption';
+      cap.textContent = p.caption;
+
+      wrap.append(img, cap);
+      grid.appendChild(wrap);
+    });
+
+    function navigateTo(url) {
+      document.body.style.animation = 'pageExit 0.4s cubic-bezier(0.22,1,0.36,1) forwards';
+      setTimeout(() => { window.location.href = url; }, 420);
+    }
+  </script>
+</body>
+</html>

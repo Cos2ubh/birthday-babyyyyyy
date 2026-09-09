@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <meta name="theme-color" content="#04040e">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="robots" content="noindex">
+  <title>For You ✦</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <script src="bg-stars.js"></script>
+
+  <div class="page">
+    <div class="title-row" style="margin-bottom:1.75rem">
+      <span class="star-decor" style="font-size:1.5rem">✦</span>
+      <h2>a little something</h2>
+      <span class="star-decor" style="font-size:1.5rem;animation-delay:1.4s">✦</span>
+    </div>
+
+    <div class="card message-wrap fade-in">
+      <div id="tw-text"></div>
+    </div>
+
+    <div class="nav-bottom" id="nextNav"
+         style="opacity:0;pointer-events:none;transition:opacity 0.8s ease">
+      <button class="btn" onclick="navigateTo('letter.html')">One last thing ✦</button>
+    </div>
+  </div>
+
+  <script src="cursor-trail.js"></script>
+  <script>
+    // ── Paste your message here — use \n for line breaks ──
+    const MESSAGE =
+      `YOUR_MESSAGE_HERE\n\nI love you, Babyyyyyy ✦`;
+
+    const container = document.getElementById('tw-text');
+    const cursorEl  = document.createElement('span');
+    cursorEl.className = 'tw-cursor';
+    container.appendChild(cursorEl);
+
+    let i = 0;
+    let done = false;
+
+    // Typing speeds (ms per character)
+    function delay(ch) {
+      if (ch === '\n')                       return 380;
+      if (ch === '.' || ch === '!' || ch === '?') return 320;
+      if (ch === ',')                        return 200;
+      if (ch === ' ')                        return 62;
+      return 52 + Math.random() * 18; // slight natural variation
+    }
+
+    function type() {
+      if (i >= MESSAGE.length) {
+        done = true;
+        document.getElementById('nextNav').style.opacity       = '1';
+        document.getElementById('nextNav').style.pointerEvents = 'auto';
+        return;
+      }
+
+      const ch = MESSAGE[i++];
+
+      if (ch === '\n') {
+        cursorEl.before(document.createElement('br'));
+        cursorEl.before(document.createElement('br'));
+      } else {
+        cursorEl.before(document.createTextNode(ch));
+      }
+
+      setTimeout(type, delay(ch));
+    }
+
+    // Tap anywhere to skip to end
+    document.addEventListener('click', () => {
+      if (done) return;
+      done = true;
+
+      // Render remaining text instantly
+      const remaining = MESSAGE.slice(i);
+      i = MESSAGE.length;
+      remaining.split('\n').forEach((line, idx) => {
+        if (idx > 0) {
+          cursorEl.before(document.createElement('br'));
+          cursorEl.before(document.createElement('br'));
+        }
+        cursorEl.before(document.createTextNode(line));
+      });
+
+      document.getElementById('nextNav').style.opacity       = '1';
+      document.getElementById('nextNav').style.pointerEvents = 'auto';
+    });
+
+    // Start typing after a short pause
+    setTimeout(type, 700);
+
+    function navigateTo(url) {
+      document.body.style.animation = 'pageExit 0.4s cubic-bezier(0.22,1,0.36,1) forwards';
+      setTimeout(() => { window.location.href = url; }, 420);
+    }
+  </script>
+</body>
+</html>

@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <meta name="theme-color" content="#04040e">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="robots" content="noindex">
+  <title>Our Wish List ✦</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <script src="bg-stars.js"></script>
+
+  <div class="page">
+    <div class="title-row">
+      <span class="star-decor" style="font-size:1.5rem">✦</span>
+      <h2>Things I Want to Do With You</h2>
+      <span class="star-decor" style="font-size:1.5rem;animation-delay:1.4s">✦</span>
+    </div>
+    <h3 style="margin-bottom:0.5rem">tap to check off ♡</h3>
+
+    <p class="wish-progress" id="wishProgress">0 done so far ✦</p>
+
+    <div class="wishlist" id="wishList"></div>
+
+    <div class="wish-ending">
+      <h2 style="font-size:clamp(1.8rem,6vw,2.6rem);margin-bottom:0.6rem">
+        Happy Birthday, Babyyyyyy 🌟
+      </h2>
+      <p style="color:var(--text-muted);font-style:italic;font-size:0.98rem;line-height:1.7;max-width:340px;margin:0 auto">
+        There's so much more of this life still left to share with you.<br>
+        I can't wait for every single bit of it. ♡
+      </p>
+      <p style="margin-top:1.5rem;font-family:var(--script);font-size:1.3rem;color:var(--gold);text-shadow:0 0 16px var(--gold-glow)">
+        ✦ &nbsp; ✦ &nbsp; ✦
+      </p>
+    </div>
+  </div>
+
+  <script src="cursor-trail.js"></script>
+  <script>
+    // ── Replace or add to these wishes ──
+    const wishes = [
+      "Watch a sunrise together, wherever we are 🌅",
+      "Cook you breakfast in bed on a random Tuesday",
+      "Have a picnic under actual stars, just the two of us 🌌",
+      "Build a blanket fort and watch movies all night",
+      "Take a spontaneous road trip with no plan at all",
+      "Visit the place you've always wanted to go",
+      "Dance with you in the rain at least once",
+      "Learn your favourite recipe so I can make it for you anytime",
+      "Write you something — a song, a letter, something that's only yours",
+      "Celebrate every small thing, because every small thing with you feels big ✦"
+    ];
+
+    const STORAGE_KEY = 'birthday_wishlist_v1';
+    const list        = document.getElementById('wishList');
+    const progressEl  = document.getElementById('wishProgress');
+
+    // Load saved state — array of booleans
+    let state = JSON.parse(localStorage.getItem(STORAGE_KEY) || 'null');
+    if (!Array.isArray(state) || state.length !== wishes.length) {
+      state = new Array(wishes.length).fill(false);
+    }
+
+    function updateProgress() {
+      const n = state.filter(Boolean).length;
+      if (n === 0)              progressEl.textContent = '0 done so far ✦';
+      else if (n === wishes.length) progressEl.textContent = 'all of them ✦ (I love you so much)';
+      else                      progressEl.textContent = `${n} of ${wishes.length} done ✦`;
+    }
+
+    wishes.forEach((text, i) => {
+      const item  = document.createElement('div');
+      item.className = 'wish-item' + (state[i] ? ' done' : '');
+      item.style.setProperty('--delay', (i * 0.075 + 0.2) + 's');
+
+      const check = document.createElement('div');
+      check.className  = 'wish-check';
+      check.innerHTML  = state[i] ? '♡' : '';
+
+      const label = document.createElement('span');
+      label.className  = 'wish-label';
+      label.textContent = text;
+
+      item.append(check, label);
+
+      item.addEventListener('click', () => {
+        state[i] = !state[i];
+        item.classList.toggle('done', state[i]);
+        check.innerHTML = state[i] ? '♡' : '';
+        localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
+        updateProgress();
+      });
+
+      list.appendChild(item);
+    });
+
+    updateProgress();
+  </script>
+</body>
+</html>
