@@ -13,15 +13,31 @@
     .polaroid-wrap { position: relative; }
     .play-badge {
       position: absolute;
-      top: 0.45rem; left: 0.45rem;
-      background: rgba(0,0,0,0.55);
-      border-radius: 50%;
-      width: 28px; height: 28px;
-      display: flex; align-items: center; justify-content: center;
-      font-size: 0.7rem; color: #fff;
-      backdrop-filter: blur(4px);
+      inset: 0;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 0.3rem;
+      background: rgba(0,0,0,0.32);
+      border-radius: 2px;
       pointer-events: none;
-      transition: opacity 0.25s;
+      transition: opacity 0.3s;
+    }
+    .play-badge .pb-icon {
+      width: 42px; height: 42px;
+      background: rgba(255,255,255,0.18);
+      border: 1.5px solid rgba(255,255,255,0.55);
+      border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 1rem; color: #fff;
+      backdrop-filter: blur(4px);
+    }
+    .play-badge .pb-label {
+      font-family: var(--script);
+      font-size: 0.75rem;
+      color: rgba(255,255,255,0.8);
+      letter-spacing: 0.03em;
     }
     .polaroid:hover .play-badge,
     .polaroid.playing .play-badge { opacity: 0; }
@@ -132,16 +148,31 @@
 
           const badge = document.createElement('div');
           badge.className = 'play-badge';
-          badge.textContent = '▶';
+          badge.innerHTML = '<div class="pb-icon">▶</div><span class="pb-label">tap to play</span>';
 
+          // Desktop: hover
           wrap.addEventListener('mouseenter', () => { vid.play().catch(() => {}); wrap.classList.add('playing'); });
           wrap.addEventListener('mouseleave', () => { vid.pause(); vid.currentTime = 0; wrap.classList.remove('playing'); });
 
-          let tapping = false;
-          wrap.addEventListener('touchstart', () => {
-            if (!tapping) { tapping = true; vid.play().catch(() => {}); wrap.classList.add('playing'); }
-            else { tapping = false; vid.pause(); vid.currentTime = 0; wrap.classList.remove('playing'); }
+          // Mobile: tap to toggle — use touchend + scroll guard
+          let touchStartY = 0;
+          wrap.addEventListener('touchstart', e => {
+            touchStartY = e.touches[0].clientY;
           }, { passive: true });
+
+          wrap.addEventListener('touchend', e => {
+            const dy = Math.abs(e.changedTouches[0].clientY - touchStartY);
+            if (dy > 8) return; // was a scroll, ignore
+            e.preventDefault();
+            if (vid.paused) {
+              vid.play().catch(() => {});
+              wrap.classList.add('playing');
+            } else {
+              vid.pause();
+              vid.currentTime = 0;
+              wrap.classList.remove('playing');
+            }
+          });
 
           if (cap) wrap.append(vid, badge, cap); else wrap.append(vid, badge);
 
