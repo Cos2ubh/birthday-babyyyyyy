@@ -9,6 +9,51 @@
   <meta name="robots" content="noindex">
   <title>Our Timeline ✦</title>
   <link rel="stylesheet" href="style.css">
+  <style>
+    /* Special styling for the dateless "exile" entry */
+    .tl-item.tl-exile {
+      justify-content: center !important;
+      flex-direction: column !important;
+      align-items: center !important;
+      margin: 0.5rem 0 0.5rem;
+    }
+    .tl-item.tl-exile .tl-body {
+      text-align: center !important;
+      max-width: 85%;
+    }
+    .tl-exile-line {
+      width: 1px;
+      height: 28px;
+      background: linear-gradient(to bottom, var(--gold-dim), rgba(255,107,157,0.4));
+      margin: 0 auto 0.6rem;
+    }
+    .tl-exile-text {
+      font-family: var(--serif);
+      font-style: italic;
+      font-size: 0.88rem;
+      color: var(--text-muted);
+      line-height: 1.6;
+      text-align: center;
+      padding: 0.75rem 1rem;
+      border: 1px solid rgba(255,107,157,0.15);
+      border-radius: 10px;
+      background: rgba(255,107,157,0.04);
+    }
+    .tl-exile-dots {
+      display: flex;
+      gap: 5px;
+      justify-content: center;
+      margin-bottom: 0.6rem;
+    }
+    .tl-exile-dots span {
+      width: 4px; height: 4px;
+      border-radius: 50%;
+      background: rgba(255,107,157,0.4);
+      animation: twinkle 1.8s ease-in-out infinite;
+    }
+    .tl-exile-dots span:nth-child(2) { animation-delay: 0.3s; }
+    .tl-exile-dots span:nth-child(3) { animation-delay: 0.6s; }
+  </style>
 </head>
 <body>
   <script src="bg-stars.js"></script>
@@ -41,32 +86,36 @@
         </div>
       </div>
 
-      <!-- ── Add your own moments below — copy a .tl-item block ── -->
-
       <div class="tl-item" style="--delay:0.65s">
-        <div class="tl-dot">✦</div>
+        <div class="tl-dot">🌙</div>
         <div class="tl-body">
-          <span class="tl-date">add a date</span>
-          <div class="tl-title">your moment here</div>
-          <div class="tl-desc">your description here</div>
+          <span class="tl-date">6 Aug 2023</span>
+          <div class="tl-title">Our first kiss</div>
+          <div class="tl-desc">and that was the first time I felt you so so so close to me</div>
         </div>
       </div>
 
-      <div class="tl-item" style="--delay:0.9s">
-        <div class="tl-dot">✦</div>
-        <div class="tl-body">
-          <span class="tl-date">add a date</span>
-          <div class="tl-title">your moment here</div>
-          <div class="tl-desc">your description here</div>
+      <!-- The exile — no date, centred, different style -->
+      <div class="tl-item tl-exile" style="--delay:0.9s">
+        <div class="tl-exile-line"></div>
+        <div class="tl-exile-dots">
+          <span></span><span></span><span></span>
         </div>
+        <div class="tl-exile-text">
+          and then came a never ending exile,<br>the darkest hour in the history of mankind
+        </div>
+        <div class="tl-exile-dots" style="margin-top:0.6rem;margin-bottom:0">
+          <span></span><span></span><span></span>
+        </div>
+        <div class="tl-exile-line" style="margin-top:0.6rem;margin-bottom:0"></div>
       </div>
 
       <div class="tl-item" style="--delay:1.15s">
-        <div class="tl-dot">✦</div>
+        <div class="tl-dot">🛋️</div>
         <div class="tl-body">
-          <span class="tl-date">add a date</span>
-          <div class="tl-title">your moment here</div>
-          <div class="tl-desc">your description here</div>
+          <span class="tl-date">8 Aug 2026</span>
+          <div class="tl-title">Side by side on that couch</div>
+          <div class="tl-desc">the day we finally sat side by side, and just felt lucky</div>
         </div>
       </div>
 
@@ -74,8 +123,8 @@
         <div class="tl-dot">💛</div>
         <div class="tl-body">
           <span class="tl-date">Today</span>
-          <div class="tl-title">Her birthday</div>
-          <div class="tl-desc">still my favourite day, every single year</div>
+          <div class="tl-title">Our birthday</div>
+          <div class="tl-desc">i hope i won't ruin your this one too</div>
         </div>
       </div>
 
