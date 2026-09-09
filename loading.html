@@ -69,12 +69,12 @@
 
       step++;
 
-      // Vary the pace so it feels organic — faster early, dramatic pause near 100%
+      // Slow enough to read — dramatic pause on the last two
       const delay = step <= 2
-        ? 550
+        ? 1800
         : step <= 7
-        ? 700 + Math.random() * 450
-        : 1100;
+        ? 2200 + Math.random() * 600
+        : 2800;
 
       setTimeout(next, delay);
     }
