@@ -9,6 +9,51 @@
   <meta name="robots" content="noindex">
   <title>A Letter ✦</title>
   <link rel="stylesheet" href="style.css">
+  <style>
+    /* Letter sits directly on the star canvas — glass effect */
+    .letter-envelope {
+      background: rgba(6, 5, 20, 0.55);
+      backdrop-filter: blur(6px);
+      -webkit-backdrop-filter: blur(6px);
+      border: 1px solid rgba(255, 215, 0, 0.18);
+      border-radius: 18px;
+      padding: 1.75rem 1.5rem;
+      box-shadow: 0 0 60px rgba(0,0,0,0.5), 0 0 24px var(--gold-glow);
+    }
+
+    /* Night-sky header strip shown before letter opens */
+    .sky-strip {
+      width: 100%;
+      height: 120px;
+      border-radius: 10px;
+      margin-bottom: 0.75rem;
+      position: relative;
+      overflow: hidden;
+      border: 1px solid rgba(255,215,0,0.12);
+    }
+
+    /* Live star canvas cloned into the strip */
+    .sky-strip canvas {
+      position: absolute;
+      inset: 0;
+      width: 100% !important;
+      height: 100% !important;
+    }
+
+    .sky-strip-label {
+      position: absolute;
+      inset: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-family: var(--script);
+      font-size: 1rem;
+      color: rgba(255,215,0,0.75);
+      text-shadow: 0 0 12px var(--gold-glow);
+      letter-spacing: 0.05em;
+      pointer-events: none;
+    }
+  </style>
 </head>
 <body>
   <script src="bg-stars.js"></script>
@@ -28,10 +73,9 @@
 
         <div class="letter-content" id="letterContent">
 
-          <!-- Star map image — save yours as images/star-map.jpg to replace this placeholder -->
-          <div class="star-map-slot" id="mapSlot">
-            <span class="slot-icon">🌌</span>
-            save your star map image as<br><strong>images/star-map.jpg</strong><br>and it will appear here
+          <!-- Night sky strip using the live star background -->
+          <div class="sky-strip" id="skyStrip">
+            <div class="sky-strip-label">The Night of Our First Kiss ✦</div>
           </div>
 
           <!-- ── Paste the letter text here ── -->
@@ -49,18 +93,51 @@
 
   <script src="cursor-trail.js"></script>
   <script>
-    // Try to load star map image — replace placeholder if it exists
+    // Mirror a live star animation into the sky strip
     (function () {
-      const probe = new Image();
-      probe.onload = () => {
-        const slot = document.getElementById('mapSlot');
-        const img  = document.createElement('img');
-        img.src       = 'images/star-map.jpg';
-        img.alt       = 'our star map';
-        img.className = 'star-map-img';
-        slot.replaceWith(img);
-      };
-      probe.src = 'images/star-map.jpg';
+      const strip  = document.getElementById('skyStrip');
+      const canvas = document.createElement('canvas');
+      strip.prepend(canvas);
+      const ctx = canvas.getContext('2d');
+      let W, H;
+
+      function resize() {
+        W = canvas.width  = strip.offsetWidth;
+        H = canvas.height = strip.offsetHeight;
+      }
+      resize();
+
+      const stars = Array.from({ length: 120 }, () => ({
+        x:     Math.random(),
+        y:     Math.random(),
+        r:     Math.random() * 1.2 + 0.2,
+        phase: Math.random() * Math.PI * 2,
+        speed: Math.random() * 0.014 + 0.004,
+        cross: Math.random() < 0.15
+      }));
+
+      function draw(t) {
+        ctx.clearRect(0, 0, W, H);
+        const ts = t * 0.001;
+        for (const s of stars) {
+          const alpha = 0.15 + 0.85 * ((Math.sin(s.phase + ts * s.speed) + 1) / 2);
+          if (s.cross) {
+            ctx.font = `${s.r * 9}px serif`;
+            ctx.fillStyle   = `rgba(255,215,0,${alpha * 0.65})`;
+            ctx.shadowColor = `rgba(255,215,0,${alpha * 0.5})`;
+            ctx.shadowBlur  = 4;
+            ctx.fillText('✦', s.x * W, s.y * H);
+            ctx.shadowBlur  = 0;
+          } else {
+            ctx.beginPath();
+            ctx.arc(s.x * W, s.y * H, s.r, 0, Math.PI * 2);
+            ctx.fillStyle = `rgba(255,249,200,${alpha})`;
+            ctx.fill();
+          }
+        }
+        requestAnimationFrame(draw);
+      }
+      requestAnimationFrame(draw);
     })();
 
     let opened = false;
@@ -72,17 +149,13 @@
       const icon    = document.getElementById('envIcon');
       const content = document.getElementById('letterContent');
 
-      // Shrink icon, then reveal content
-      icon.style.fontSize  = '1.6rem';
+      icon.style.fontSize     = '1.6rem';
       icon.style.marginBottom = '1rem';
-      icon.style.animation = 'none';
-      icon.style.cursor    = 'default';
+      icon.style.animation    = 'none';
+      icon.style.cursor       = 'default';
 
-      requestAnimationFrame(() => {
-        content.classList.add('open');
-      });
+      requestAnimationFrame(() => { content.classList.add('open'); });
 
-      // Show next button after content has had time to unfold
       setTimeout(() => {
         const nav = document.getElementById('wishNav');
         nav.style.opacity       = '1';
