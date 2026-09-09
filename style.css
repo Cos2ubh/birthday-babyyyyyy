@@ -21,7 +21,7 @@
 html { scroll-behavior: smooth; }
 
 body {
-  background: var(--bg);
+  background: var(--bg); /* fallback if image fails */
   color: var(--text);
   font-family: var(--serif);
   min-height: 100vh;

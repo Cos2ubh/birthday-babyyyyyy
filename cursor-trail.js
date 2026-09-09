@@ -3,7 +3,7 @@
 
   // Canvas-based cursor trail — GPU composited, zero layout thrashing
   const canvas = document.createElement('canvas');
-  canvas.style.cssText = 'position:fixed;inset:0;z-index:9999;pointer-events:none;';
+  canvas.style.cssText = 'position:fixed;inset:0;z-index:10000;pointer-events:none;';
   document.body.appendChild(canvas);
 
   const ctx = canvas.getContext('2d');
