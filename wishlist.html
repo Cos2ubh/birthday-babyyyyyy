@@ -26,16 +26,13 @@
     <div class="wishlist" id="wishList"></div>
 
     <div class="wish-ending">
-      <h2 style="font-size:clamp(1.8rem,6vw,2.6rem);margin-bottom:0.6rem">
-        Happy Birthday, Babyyyyyy 🌟
-      </h2>
       <p style="color:var(--text-muted);font-style:italic;font-size:0.98rem;line-height:1.7;max-width:340px;margin:0 auto">
-        There's so much more of this life still left to share with you.<br>
-        I can't wait for every single bit of it. ♡
+        There's so much more of this life still left to share with you. ♡
       </p>
-      <p style="margin-top:1.5rem;font-family:var(--script);font-size:1.3rem;color:var(--gold);text-shadow:0 0 16px var(--gold-glow)">
-        ✦ &nbsp; ✦ &nbsp; ✦
-      </p>
+    </div>
+
+    <div class="nav-bottom">
+      <button class="btn" onclick="navigateTo('message.html')">A little something ✦</button>
     </div>
   </div>
 
@@ -99,6 +96,11 @@
     });
 
     updateProgress();
+
+    function navigateTo(url) {
+      document.body.style.animation = 'pageExit 0.4s cubic-bezier(0.22,1,0.36,1) forwards';
+      setTimeout(() => { window.location.href = url; }, 420);
+    }
   </script>
 </body>
 </html>
